@@ -5,18 +5,12 @@ import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
 
 @Accessors
-@AllArgsConstructor
-@NoArgsConstructor
 @Component
 @ToString
-@Builder
-public class Brothers {
+public class Brothers extends People{
 
     @Getter @Setter
     private Integer id;
-
-    @Getter @Setter
-    private String name;
 
     @Getter @Setter
     private Integer cim;
