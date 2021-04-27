@@ -1,16 +1,26 @@
-package br.com.prsouz.brothers.engine.repository;
+package br.com.prsouz.brothers.engine.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Accessors
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-
+@Entity(name = "ENDERECO")
 public class Endereco {
+
+    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Getter @Setter
     private String logradouro;
