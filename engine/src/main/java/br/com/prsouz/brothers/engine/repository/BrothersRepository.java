@@ -1,8 +1,11 @@
 package br.com.prsouz.brothers.engine.repository;
 
-import br.com.prsouz.brothers.engine.entity.Brothers;
-import org.springframework.data.repository.CrudRepository;
+import br.com.prsouz.brothers.engine.core.model.BrotherModel;
+import br.com.prsouz.brothers.engine.entity.BrothersEntity;
 
-public interface BrothersRepository extends CrudRepository<Brothers, Long> {
+public interface BrothersRepository {
+
+    BrotherModel CreateNewBrother(BrotherModel brotherModel);
+    Iterable<BrothersEntity> GetAllBrothers();
 
 }

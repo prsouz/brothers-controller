@@ -1,14 +1,19 @@
 package br.com.prsouz.brothers.engine.controller;
 
-import br.com.prsouz.brothers.engine.entity.Brothers;
-import br.com.prsouz.brothers.engine.entity.Endereco;
+import br.com.prsouz.brothers.engine.core.model.BrotherModel;
+import br.com.prsouz.brothers.engine.core.ports.in.transfobject.BrotherTO;
+import br.com.prsouz.brothers.engine.core.usecase.ProcessBrothers;
+import br.com.prsouz.brothers.engine.entity.BrothersEntity;
 import br.com.prsouz.brothers.engine.repository.BrothersRepository;
-import br.com.prsouz.brothers.engine.service.BrothersTools;
+import br.com.prsouz.brothers.engine.utility.BrotherConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class BrothersController {
@@ -17,29 +22,34 @@ public class BrothersController {
     private BrothersRepository repository;
 
     @Autowired
-    private BrothersTools brothersTools;
+    private BrothersRepository brothersRepository;
 
-    @GetMapping(path = "/add")
-    public void createUser() {
-        brothersTools.createNewBrother("Pedro O Lindão",
-                "299.023.498-54",
-                289560,
-                repository);
-        System.out.println("testando");
+    @Autowired
+    BrotherConverter brotherConverter;
 
+    @Autowired
+    ProcessBrothers processBrothers;
+
+    @PostMapping(path = "/add")
+    public BrotherModel createUser(@RequestBody BrotherTO brother) {
+        BrotherModel brotherModel = brotherConverter.convertBrotherTOToModel(brother);
+        brotherModel = processBrothers.saveNewBrother(brotherModel);
+        return brotherModel;
+    }
+
+    @GetMapping(path = "/get")
+    public List<BrotherModel> consultaUsers(){
+    Iterable<BrothersEntity> brotherEntity = brothersRepository.GetAllBrothers();
+    List<BrotherModel> brotherModel = new ArrayList<>();
+    brotherEntity.forEach(brother -> brotherModel.add(brotherConverter.convertBrotherEntityToModel(brother)));
+    return brotherModel;
 
     }
 
-    @GetMapping(path = "/consulta")
-    public Iterable<Brothers> consultaUsers(){
+     /* @GetMapping(path = "/brothers")
+    public BrothersEntity getBrother(){
 
-        return repository.findAll();
-    }
-
-    @GetMapping(path = "/brothers")
-    public Brothers getBrother(){
-
-        Brothers brother = new Brothers();
+        BrothersEntity brother = new BrothersEntity();
         Endereco end = new Endereco();
         end.setLogradouro("Av. Dom Jaime de Barros Camara");
         brother.setName("Paulo");
@@ -55,7 +65,7 @@ public class BrothersController {
 
         return brother;
 
-    }
+    }*/
 
 
 }
